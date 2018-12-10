@@ -114,7 +114,7 @@ public class Graph {
         if(!edgesGiven){
             return;
         }
-        for(Edge e: allUndirectedEdges){
+        for(Edge e: allUndirectedEdges){//run through all undirected edges in graph
             double ux = e.getSource().getX();
             double uy = e.getSource().getY();
             double vx = e.getTarget().getX();
@@ -122,7 +122,7 @@ public class Graph {
             e.setDistance(Math.sqrt(Math.pow((ux-vx),SQUARE)+Math.pow((uy-vy),SQUARE)));
         }
 
-        Collection<Vertex> vCollection = getVertices();
+        Collection<Vertex> vCollection = getVertices();//run through all adjacent edges in all vertices
         for(Vertex v: vCollection){
             for(Edge e: v.adjacentEdges){
                 double ux = v.getX();
@@ -148,6 +148,7 @@ public class Graph {
         Vertex[] v = vCollection.toArray(new Vertex[vCollection.size()]);
         for(int i= 0; i<v.length-1;i++){
             for(int j = i+1; j<v.length; j++){
+                //for each vertices, only connect with other vertices that it did not connect before
                 double dist = Math.sqrt(Math.pow((v[i].getX()-v[j].getX()),SQUARE)
                                 +Math.pow((v[i].getY()-v[j].getY()),SQUARE));
                 //addUndirectedEdge(v[i].getName(),v[j].getName(),dist);
@@ -159,12 +160,13 @@ public class Graph {
     }
 
     /**
-     * TODO: add Javadoc comments
+     * this method runs KruskalsAlg to find the minimum spanning tree for the graph
+     * @return an arrayList containign the minimum spanning tree's edges
      */
     public ArrayList<Edge> runKruskalsAlg() {
         // if resultMST is already computed, return the resultMST at first
         // TODO
-        if(resultMST.equals(null)){
+        if(!resultMST.isEmpty()){
             return resultMST;
         }
         int vNum = getVertices().size();
@@ -172,9 +174,10 @@ public class Graph {
         DisjointSet ds = new DisjointSet();
         for(Edge e: allUndirectedEdges){
             if(ds.find(e.getTarget()).equals(ds.find(e.getSource()))){
+                //check if edges' source and target vertices has been tested
                 continue;
             }
-            ds.union(e.getSource(),e.getTarget());
+            ds.union(e.getSource(),e.getTarget());//add source and target to tested set
             resultMST.add(e);
             if(resultMST.size()==vNum){
                 return resultMST;
@@ -183,27 +186,5 @@ public class Graph {
         return resultMST;
     }
 
-    public static void main(String[] args){
-        Vertex a = new Vertex("a",1,2);
-        Vertex b = new Vertex("b", 2,3);
-        Vertex c = new Vertex("c",4,4);
-        Vertex d = new Vertex("d",1,0);
-        Vertex e = new Vertex("e",5,6);
-        Graph g = new Graph(false);
-        g.addVertex(a);
-        g.addVertex(b);
-        g.addVertex(c);
-        for(Vertex v: g.getVertices()){
-            System.out.println(v.getName());
-        }
-        g.populateAllEdges();
-        for(Edge x:g.allUndirectedEdges){
-            System.out.println(x);
-        }
-        g.addUndirectedEdge("a","b",3);
-        g.addUndirectedEdge("a","c",4);
-        g.addUndirectedEdge("b","c",2);
-        System.out.println(g.runKruskalsAlg());
-        //g.populateAllEdges();
-    }
+//
 }

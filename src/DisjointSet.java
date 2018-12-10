@@ -20,7 +20,7 @@ public class DisjointSet {
         }
         Vertex curr = v;
         while(!curr.getRoot().equals(curr)){
-            curr = curr.getRoot();
+            curr = curr.getRoot();//track into the root of vertex
         }
         return curr;
     }
@@ -34,10 +34,10 @@ public class DisjointSet {
         // TODO
         Vertex root1 = find(v1);
         Vertex root2 = find(v2);
-        if(root1.equals(root2)){
+        if(root1.equals(root2)){// return if root1 and root2 are equal
             return;
         }
-        if(root1.getSize()>root2.getSize()){
+        if(root1.getSize()>root2.getSize()){//set the larger size vertex the root of smaller size vertex
             root2.setRoot(root1);
             root1.setSize(root1.getSize()+root2.getSize());
         }
